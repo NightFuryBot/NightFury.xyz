@@ -25,6 +25,11 @@ import kotlin.browser.document
 import kotlin.browser.window
 
 fun main(args: Array<String>) {
+    // Redirect if the url is nightfuxy.xyz
+    if(document.documentURI.endsWith(".xyz", true) or document.documentURI.endsWith(".xyz/", true)) {
+        return window.location.assign("http://nightfury.xyz/index.html?")
+    }
+
     window.onload = {
         console.info(document.documentURI)
 

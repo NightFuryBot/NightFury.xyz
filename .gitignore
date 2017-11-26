@@ -16,7 +16,7 @@
 *.png
 *.jpg
 *.ico
-/src/main/resources/favicon
+/src/main/resources/favicon/
 
 # Fonts
 /src/main/resources/fonts/

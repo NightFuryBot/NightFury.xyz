@@ -87,7 +87,7 @@ tasks {
                 from(mainSourceSet.output) {
                     exclude("**/*.kjsm")
                 }
-                into("$buildDir/nightfury.xyz/src")
+                into("$buildDir/www/html")
             }
         }
     }
