@@ -21,10 +21,10 @@ import org.w3c.dom.HTMLElement
 
 inline fun <reified T: TagConsumer<HTMLElement>> T.navBar() =
     ul(classes = "nav-bar-ul") {
-        navLi { navA  /* TODO href */   { + "Home"          } }
+        navLi { navA(HTMLDoc.INDEX.url) { + "Home"          } }
         navLi { navA  /* TODO href */   { + "Documentation" } }
-        navLi { navA(href = BOT_INVITE) { + "Invite"        } }
-        navLi { navA(href = SUPPORT)    { + "Support"       } }
+        navLi { navA(BOT_INVITE)        { + "Invite"        } }
+        navLi { navA(SUPPORT)           { + "Support"       } }
     }
 
 inline fun <reified U: UL> U.navLi(crossinline block: LI.() -> Unit) =

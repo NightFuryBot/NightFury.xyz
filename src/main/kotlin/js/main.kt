@@ -25,34 +25,19 @@ import kotlin.browser.document
 import kotlin.browser.window
 
 fun main(args: Array<String>) {
+    val currentLocation = window.location.pathname
+
     // Redirect if the url is nightfuxy.xyz
-    if(document.documentURI.endsWith(".xyz", true) or document.documentURI.endsWith(".xyz/", true)) {
-        return window.location.assign("http://nightfury.xyz/index.html?")
+    if(currentLocation == "/" || currentLocation.isEmpty()) {
+        return window.location.assign("http://nightfury.xyz/index.html")
     }
 
     window.onload = {
-        console.info(document.documentURI)
-
-        val parts = document.documentURI.split(splitter)
-
-        val htmldoc: String = parts[parts.size - 1].run {
-            if(contains("?")) {
-                val sIndex = indexOf("?")
-                substring(0, sIndex)
-            } else this
-        }.run {
-            if(endsWith("html", ignoreCase = true)) {
-                substring(0, length - 5)
-            } else this
-        }
-
-        val doc = HTMLDoc.values().find { it.name.equals(htmldoc, ignoreCase = true) }
+        val doc = HTMLDoc.values().find { it.suffix == currentLocation }
 
         doc?.generator?.invoke(it)
     }
 }
-
-val splitter = Regex("/")
 
 private inline fun <reified T: TagConsumer<HTMLElement>> T.centerDiv() = div(classes = "center-div") {
     h1(classes = "center-div-header") {
@@ -64,12 +49,14 @@ private inline fun <reified T: TagConsumer<HTMLElement>> T.centerDiv() = div(cla
     }
 }
 
-enum class HTMLDoc(val generator: (Event) -> Unit) {
-    INDEX({
+enum class HTMLDoc(val suffix: String, val generator: (Event) -> Unit) {
+    INDEX("/index.html", generator = {
         document.run { body ?: create.body {} }.append {
             navBar()
             centerDiv()
             copyright()
         }
-    })
+    });
+
+    val url: String = "http://nightfury.xyz$suffix"
 }
