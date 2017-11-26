@@ -1,0 +1,22 @@
+# Gradle Project Files
+/.gradle/
+/build/
+
+# Intellij Project Files
+/.idea/
+/out/
+/src/test/
+*.iml
+
+# Personal Files
+/logs/
+/API/
+
+# Image Files
+*.png
+*.jpg
+*.ico
+/src/main/resources/favicon
+
+# Fonts
+/src/main/resources/fonts/
