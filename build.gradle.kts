@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 buildscript {
     var kotlin_version: String by extra
-    kotlin_version = "1.2.0-rc-84"
+    kotlin_version = "1.2.0"
 
     repositories {
         jcenter()

@@ -29,7 +29,13 @@ fun main(args: Array<String>) {
 
     // Redirect if the url is nightfuxy.xyz
     if(currentLocation == "/" || currentLocation.isEmpty()) {
-        return window.location.assign("http://nightfury.xyz/index.html")
+        return window.location.assign(HTMLDoc.INDEX.url)
+    }
+
+    // Redirect to .html link if not suffixed by it
+    if(!currentLocation.endsWith(".html", ignoreCase = true)) {
+        return window.location.assign("${URLs.BASE_URL}${
+        if(currentLocation.startsWith("/")) currentLocation else "/$currentLocation"}.html")
     }
 
     window.onload = {
@@ -49,6 +55,14 @@ private inline fun <reified T: TagConsumer<HTMLElement>> T.centerDiv() = div(cla
     }
 }
 
+object URLs {
+    val BASE_URL: String = window.location.origin
+    const val BOT_INVITE: String =
+        "https://discordapp.com/oauth2/authorize?client_id=263895505145298944&permissions=671211734&scope=bot"
+
+    const val SUPPORT_SERVER: String = "https://discord.gg/XCmwxy8"
+}
+
 enum class HTMLDoc(val suffix: String, val generator: (Event) -> Unit) {
     INDEX("/index.html", generator = {
         document.run { body ?: create.body {} }.append {
@@ -56,7 +70,10 @@ enum class HTMLDoc(val suffix: String, val generator: (Event) -> Unit) {
             centerDiv()
             copyright()
         }
-    });
+    }),
 
-    val url: String = "http://nightfury.xyz$suffix"
+    INVITE("/invite.html", generator = { window.location.assign(URLs.BOT_INVITE) }),
+    SUPPORT("/support.html", generator = { window.location.assign(URLs.SUPPORT_SERVER) });
+
+    val url: String = "${URLs.BASE_URL}$suffix"
 }

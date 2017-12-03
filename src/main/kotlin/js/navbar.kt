@@ -21,10 +21,10 @@ import org.w3c.dom.HTMLElement
 
 inline fun <reified T: TagConsumer<HTMLElement>> T.navBar() =
     ul(classes = "nav-bar-ul") {
-        navLi { navA(HTMLDoc.INDEX.url) { + "Home"          } }
-        navLi { navA  /* TODO href */   { + "Documentation" } }
-        navLi { navA(BOT_INVITE)        { + "Invite"        } }
-        navLi { navA(SUPPORT)           { + "Support"       } }
+        navLi { navA(HTMLDoc.INDEX.url)   { + "Home"          } }
+        navLi { navA  /* TODO href */     { + "Documentation" } }
+        navLi { navA(HTMLDoc.INVITE.url)  { + "Invite"        } }
+        navLi { navA(HTMLDoc.SUPPORT.url) { + "Support"       } }
     }
 
 inline fun <reified U: UL> U.navLi(crossinline block: LI.() -> Unit) =
@@ -32,8 +32,3 @@ inline fun <reified U: UL> U.navLi(crossinline block: LI.() -> Unit) =
 
 inline fun <reified L: LI> L.navA(href: String? = null, target: String? = null, crossinline block: A.() -> Unit) =
     a(href, target, "nav-bar-a") { block() }
-
-const val BOT_INVITE: String =
-    "https://discordapp.com/oauth2/authorize?client_id=263895505145298944&permissions=671211734&scope=bot"
-
-const val SUPPORT: String = "https://discord.gg/XCmwxy8"
