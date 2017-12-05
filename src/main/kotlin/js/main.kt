@@ -32,14 +32,10 @@ fun main(args: Array<String>) {
         return window.location.assign(HTMLDoc.INDEX.url)
     }
 
-    // Redirect to .html link if not suffixed by it
-    if(!currentLocation.endsWith(".html", ignoreCase = true)) {
-        return window.location.assign("${URLs.BASE_URL}${
-        if(currentLocation.startsWith("/")) currentLocation else "/$currentLocation"}.html")
-    }
-
     window.onload = {
-        val doc = HTMLDoc.values().find { it.suffix == currentLocation }
+        val doc = HTMLDoc.values().find {
+            it.suffix == currentLocation
+        }
 
         doc?.generator?.invoke(it)
     }
@@ -64,7 +60,7 @@ object URLs {
 }
 
 enum class HTMLDoc(val suffix: String, val generator: (Event) -> Unit) {
-    INDEX("/index.html", generator = {
+    INDEX("/index", generator = {
         document.run { body ?: create.body {} }.append {
             navBar()
             centerDiv()
@@ -72,8 +68,14 @@ enum class HTMLDoc(val suffix: String, val generator: (Event) -> Unit) {
         }
     }),
 
-    INVITE("/invite.html", generator = { window.location.assign(URLs.BOT_INVITE) }),
-    SUPPORT("/support.html", generator = { window.location.assign(URLs.SUPPORT_SERVER) });
+    INVITE("/invite", generator = { window.location.assign(URLs.BOT_INVITE) }),
+    SUPPORT("/support", generator = { window.location.assign(URLs.SUPPORT_SERVER) }),
+
+    ERROR404("/error/404", generator = {
+        document.run { body ?: create.body {} }.append {
+            h1 { + "404 - Not Found!" } // TODO Make this better
+        }
+    });
 
     val url: String = "${URLs.BASE_URL}$suffix"
 }
