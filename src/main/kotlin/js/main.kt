@@ -26,22 +26,20 @@ import kotlin.browser.window
 
 fun main(args: Array<String>) {
     val currentLocation = window.location.pathname
-
-    // Redirect if the url is nightfuxy.xyz
-    if(currentLocation == "/" || currentLocation.isEmpty()) {
-        return window.location.assign(HTMLDoc.INDEX.url)
-    }
-
-    window.onload = {
-        val doc = HTMLDoc.values().find {
-            it.suffix == currentLocation
+    window.onload = onload@ {
+        // Check to see if the path requested is hidden
+        URLs.HIDDEN_PATHS.find { it.equals(currentLocation, ignoreCase = true) }?.let {
+            return@onload window.location.assign(HTMLDoc.ERROR404.url)
         }
 
-        doc?.generator?.invoke(it)
+        val doc = HTMLDoc.values().find { it.suffix == currentLocation }
+                  ?: return@onload window.location.assign(HTMLDoc.ERROR404.url)
+
+        doc.generator.invoke(it)
     }
 }
 
-private inline fun <reified T: TagConsumer<HTMLElement>> T.centerDiv() = div(classes = "center-div") {
+inline fun <reified T: TagConsumer<HTMLElement>> T.centerDiv() = div(classes = "center-div") {
     h1(classes = "center-div-header") {
         + "NightFury"
     }
@@ -49,33 +47,4 @@ private inline fun <reified T: TagConsumer<HTMLElement>> T.centerDiv() = div(cla
     p(classes = "center-div-paragraph") {
         + "A Multipurpose Discord Bot For Your Server."
     }
-}
-
-object URLs {
-    val BASE_URL: String = window.location.origin
-    const val BOT_INVITE: String =
-        "https://discordapp.com/oauth2/authorize?client_id=263895505145298944&permissions=671211734&scope=bot"
-
-    const val SUPPORT_SERVER: String = "https://discord.gg/XCmwxy8"
-}
-
-enum class HTMLDoc(val suffix: String, val generator: (Event) -> Unit) {
-    INDEX("/index", generator = {
-        document.run { body ?: create.body {} }.append {
-            navBar()
-            centerDiv()
-            copyright()
-        }
-    }),
-
-    INVITE("/invite", generator = { window.location.assign(URLs.BOT_INVITE) }),
-    SUPPORT("/support", generator = { window.location.assign(URLs.SUPPORT_SERVER) }),
-
-    ERROR404("/error/404", generator = {
-        document.run { body ?: create.body {} }.append {
-            h1 { + "404 - Not Found!" } // TODO Make this better
-        }
-    });
-
-    val url: String = "${URLs.BASE_URL}$suffix"
 }

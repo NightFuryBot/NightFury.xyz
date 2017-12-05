@@ -21,7 +21,7 @@ import org.w3c.dom.HTMLElement
 
 inline fun <reified T: TagConsumer<HTMLElement>> T.navBar() =
     ul(classes = "nav-bar-ul") {
-        navLi { navA(HTMLDoc.INDEX.url)   { + "Home"          } }
+        navLi { navA(HTMLDoc.LANDING.url) { + "Home"          } }
         navLi { navA  /* TODO href */     { + "Documentation" } }
         navLi { navA(HTMLDoc.INVITE.url)  { + "Invite"        } }
         navLi { navA(HTMLDoc.SUPPORT.url) { + "Support"       } }
