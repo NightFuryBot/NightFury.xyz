@@ -13,32 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package js
+package js.error
 
-import js.error.generate404Page
+import js.URLs
 import kotlinx.html.dom.append
 import kotlinx.html.dom.create
+import kotlinx.html.js.a
 import kotlinx.html.js.body
-import org.w3c.dom.events.Event
+import kotlinx.html.js.h1
 import kotlin.browser.document
-import kotlin.browser.window
 
-/**
- * @author Kaidan Gustave
- */
-enum class HTMLDoc(val suffix: String, val generator: (Event) -> Unit) {
-    LANDING("/", generator = {
-        document.run { body ?: create.body {} }.append {
-            navBar()
-            centerDiv()
-            copyright()
+fun generate404Page() {
+    document.run { body ?: create.body {} }.append {
+        h1 { + "404 - Not Found!" }
+
+        a {
+            + "Go to main site."
+            href = URLs.BASE_URL
         }
-    }),
-
-    INVITE("/invite", generator = { window.location.assign(URLs.BOT_INVITE) }),
-    SUPPORT("/support", generator = { window.location.assign(URLs.SUPPORT_SERVER) }),
-
-    ERROR404("/error/404", generator = { generate404Page() });
-
-    val url: String = "${URLs.BASE_URL}$suffix"
+    }
 }
