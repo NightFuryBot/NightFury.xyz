@@ -49,7 +49,7 @@ tasks {
         kotlinOptions {
             main = "main.js"
             noStdlib = false
-            verbose = true
+            verbose = false
             outputFile = "${mainSourceSet.output.resourcesDir}/$main"
             sourceMap = true
             metaInfo = true

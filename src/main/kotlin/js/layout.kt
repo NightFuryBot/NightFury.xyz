@@ -15,7 +15,7 @@
  */
 package js
 
-import kotlinx.html.*
+import kotlinx.html.TagConsumer
 import kotlinx.html.js.footer
 import org.w3c.dom.HTMLElement
 

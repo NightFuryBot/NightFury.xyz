@@ -15,13 +15,11 @@
  */
 package js
 
-import kotlinx.html.*
-import kotlinx.html.dom.append
-import kotlinx.html.dom.create
-import kotlinx.html.js.*
+import kotlinx.html.TagConsumer
+import kotlinx.html.js.div
+import kotlinx.html.js.h1
+import kotlinx.html.js.p
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.events.Event
-import kotlin.browser.document
 import kotlin.browser.window
 
 fun main(args: Array<String>) {
