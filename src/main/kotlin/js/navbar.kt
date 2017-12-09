@@ -19,16 +19,16 @@ import kotlinx.html.*
 import kotlinx.html.js.ul
 import org.w3c.dom.HTMLElement
 
-inline fun <reified T: TagConsumer<HTMLElement>> T.navBar() =
+fun TagConsumer<HTMLElement>.navBar() =
     ul(classes = "nav-bar-ul") {
         navLi { navA(HTMLDoc.LANDING.url) { + "Home"          } }
         navLi { navA  /* TODO href */     { + "Documentation" } }
         navLi { navA(HTMLDoc.INVITE.url)  { + "Invite"        } }
         navLi { navA(HTMLDoc.SUPPORT.url) { + "Support"       } }
+        navLi { navA(HTMLDoc.GITHUB.url)  { + "GitHub"        } }
     }
 
-inline fun <reified U: UL> U.navLi(crossinline block: LI.() -> Unit) =
-    li("nav-bar-li") { block() }
+fun UL.navLi(block: LI.() -> Unit) = li("nav-bar-li") { block() }
 
-inline fun <reified L: LI> L.navA(href: String? = null, target: String? = null, crossinline block: A.() -> Unit) =
+fun LI.navA(href: String? = null, target: String? = null, block: A.() -> Unit) =
     a(href, target, "nav-bar-a") { block() }

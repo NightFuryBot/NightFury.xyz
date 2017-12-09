@@ -1,0 +1,96 @@
+import org.json.JSONObject
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.1"
+        classpath "org.jetbrains.kotlinx:kotlinx-html-jvm:0.6.8"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'kotlin'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceCompatibility = 1.8
+
+group 'xyz.nightfury'
+version '1.0'
+
+mainClassName = "${group}.html.Main"
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url 'https://jitpack.io/' }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.jetbrains.kotlinx:kotlinx-html-jvm:0.6.8"
+    compile "com.github.TheMonitorLizard:KSON:master-SNAPSHOT"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": mainClassName
+    }
+}
+
+shadowJar {
+    baseName = "NightFuryHTML"
+    classifier = ""
+    version = ""
+}
+
+tasks.create("createConfig") {
+    group = "build"
+    description = "Creates a config.json in the resources folder"
+
+    def resDir = sourceSets.main.resources.srcDirs[0]
+    def configFile = file("$resDir/config.json")
+
+    doFirst {
+        // Clear the current one if one exists
+        if(configFile.exists())
+            configFile.delete()
+
+        // Create a new one
+        configFile.createNewFile()
+    }
+
+    doLast {
+        def json = new JSONObject()
+        json.put("output", "$rootProject.buildDir.path/html")
+
+        // Write json
+        configFile.write(json.toString())
+    }
+}
+
+build {
+    dependsOn createConfig
+    dependsOn clean
+    dependsOn classes
+    dependsOn shadowJar
+
+    createConfig.shouldRunAfter clean
+    classes.shouldRunAfter createConfig
+    shadowJar.shouldRunAfter classes
+}

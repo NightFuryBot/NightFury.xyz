@@ -22,12 +22,15 @@ import kotlin.browser.window
  */
 object URLs {
     val BASE_URL: String = window.location.origin
+
     const val BOT_INVITE: String =
         "https://discordapp.com/oauth2/authorize?client_id=263895505145298944&permissions=671211734&scope=bot"
+
+    const val SUPPORT_SERVER: String = "https://discord.gg/XCmwxy8"
+
+    const val GITHUB_REPO: String = "https://github.com/NightFuryBot/NightFury"
 
     val HIDDEN_PATHS: Array<String> = arrayOf(
         "/index.html", "/index"
     )
-
-    const val SUPPORT_SERVER: String = "https://discord.gg/XCmwxy8"
 }

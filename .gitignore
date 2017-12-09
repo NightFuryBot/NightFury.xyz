@@ -1,16 +1,19 @@
 # Gradle Project Files
 /.gradle/
-/build/
+/**/build/
 
 # Intellij Project Files
 /.idea/
-/out/
+/**/out/
 /src/test/
 *.iml
 
 # Personal Files
 /logs/
 /API/
+
+# Exclude HTML Config File
+/HTML/src/main/resources/config.json
 
 # Image Files
 *.png

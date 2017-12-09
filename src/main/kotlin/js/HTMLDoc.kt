@@ -18,7 +18,7 @@ package js
 import js.error.generate404Page
 import kotlinx.html.dom.append
 import kotlinx.html.dom.create
-import kotlinx.html.js.body
+import kotlinx.html.js.*
 import org.w3c.dom.events.Event
 import kotlin.browser.document
 import kotlin.browser.window
@@ -26,19 +26,45 @@ import kotlin.browser.window
 /**
  * @author Kaidan Gustave
  */
-enum class HTMLDoc(val suffix: String, val generator: (Event) -> Unit) {
-    LANDING("/", generator = {
+enum class HTMLDoc(private val title: String, val suffix: String, val generator: (Event) -> Unit) {
+    LANDING("NightFury", "/", generator = {
         document.run { body ?: create.body {} }.append {
             navBar()
-            centerDiv()
+            div(classes = "center-div") {
+                h1(classes = "center-div-header") {
+                    + "NightFury"
+                }
+
+                p(classes = "center-div-paragraph") {
+                    + "A Multipurpose Discord Bot For Your Server."
+                }
+            }
             copyright()
         }
     }),
 
-    INVITE("/invite", generator = { window.location.assign(URLs.BOT_INVITE) }),
-    SUPPORT("/support", generator = { window.location.assign(URLs.SUPPORT_SERVER) }),
+    INVITE("Invite", "/invite", generator = {
+        window.location.assign(URLs.BOT_INVITE)
+    }),
 
-    ERROR404("/error/404", generator = { generate404Page() });
+    SUPPORT("Support", "/support", generator = {
+        document.title = "Support"
+        window.location.assign(URLs.SUPPORT_SERVER)
+    }),
+
+    GITHUB("GitHub", "/github", generator = {
+        window.location.assign(URLs.GITHUB_REPO)
+    }),
+
+    ERROR404("404 Not Found","/error/404", generator = { generate404Page() });
 
     val url: String = "${URLs.BASE_URL}$suffix"
+
+    fun redirectTo() = window.location.assign(url)
+
+    fun run(event: Event) {
+        document.title = title
+        generator(event)
+
+    }
 }

@@ -13,12 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package js
+package xyz.nightfury.html
 
+import kotlinx.html.HTML
 import kotlinx.html.TagConsumer
-import kotlinx.html.js.footer
-import org.w3c.dom.HTMLElement
+import kotlinx.html.html
+import org.w3c.dom.Document
+import java.io.File
+import java.nio.file.Paths
 
-fun TagConsumer<HTMLElement>.copyright() = footer("copyright") {
-    + "Copyright @ Kaidan Gustave 2017"
+/**
+ * @author Kaidan Gustave
+ */
+interface DocumentGenerator {
+    val file: String
+    val subDir: String
+        get() = ""
+
+    fun file(base: String): File {
+        return if(subDir.isNotEmpty()) Paths.get(base, subDir, "$file.html").toFile()
+        else Paths.get(base, "$file.html").toFile()
+    }
+
+    fun TagConsumer<Document>.create(): Document = html { generate() }
+    fun HTML.generate(): Any
 }

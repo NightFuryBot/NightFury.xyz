@@ -15,34 +15,17 @@
  */
 package js
 
-import kotlinx.html.TagConsumer
-import kotlinx.html.js.div
-import kotlinx.html.js.h1
-import kotlinx.html.js.p
-import org.w3c.dom.HTMLElement
 import kotlin.browser.window
 
 fun main(args: Array<String>) {
     val currentLocation = window.location.pathname
     window.onload = onload@ {
         // Check to see if the path requested is hidden
-        URLs.HIDDEN_PATHS.find { it.equals(currentLocation, ignoreCase = true) }?.let {
-            return@onload window.location.assign(HTMLDoc.ERROR404.url)
+        if(URLs.HIDDEN_PATHS.any { it.equals(currentLocation, ignoreCase = true) }) {
+            return@onload HTMLDoc.ERROR404.redirectTo()
         }
 
-        val doc = HTMLDoc.values().find { it.suffix == currentLocation }
-                  ?: return@onload window.location.assign(HTMLDoc.ERROR404.url)
-
-        doc.generator.invoke(it)
-    }
-}
-
-inline fun <reified T: TagConsumer<HTMLElement>> T.centerDiv() = div(classes = "center-div") {
-    h1(classes = "center-div-header") {
-        + "NightFury"
-    }
-
-    p(classes = "center-div-paragraph") {
-        + "A Multipurpose Discord Bot For Your Server."
+        HTMLDoc.values().find { it.suffix.equals(currentLocation, ignoreCase = true) }?.run(it)
+        ?: HTMLDoc.ERROR404.redirectTo()
     }
 }

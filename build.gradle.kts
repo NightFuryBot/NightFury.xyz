@@ -13,7 +13,6 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
-        maven { setUrl("http://dl.bintray.com/kotlin/kotlin-eap-1.2") }
     }
 
     dependencies {
@@ -34,7 +33,6 @@ apply {
 repositories {
     jcenter()
     mavenCentral()
-    maven { setUrl("http://dl.bintray.com/kotlin/kotlin-eap-1.2") }
 }
 
 dependencies {
@@ -61,7 +59,7 @@ tasks {
         group = "build"
         description = "Reorganizes resources to compile correctly."
 
-        val outputDir = file("$buildDir/$name")
+        val outputDir = file("$buildDir/libraries")
         val compileClasspath = configurations["compileClasspath"]
 
         inputs.property("compileClasspath", compileClasspath)
@@ -84,6 +82,7 @@ tasks {
             copy {
                 includeEmptyDirs = false
                 from(outputDir)
+                from("$buildDir/html")
                 from(mainSourceSet.output) {
                     exclude("**/*.kjsm")
                 }
@@ -96,9 +95,36 @@ tasks {
         dependsOn(organizeResources)
     }
 
+    val buildChildren by creating {
+        group = "build"
+        description = "Builds all child modules."
+        childProjects.values.forEach {
+            dependsOn(it.getTasksByName("build", true)?.first())
+        }
+    }
+
+    val runHTMLJar by creating {
+        group = "build"
+        description = "Runs the HTML Generator Jar."
+
+        assert(childProjects.containsKey(":HTML")) { "No HTML module detected!" }
+
+        doLast {
+            exec {
+                setWorkingDir(file("${project(":HTML").buildDir}/libs/"))
+                commandLine("java", "-jar", "NightFuryHTML.jar")
+            }
+        }
+    }
+
     "build" {
         dependsOn("clean")
+        dependsOn(buildChildren)
+        dependsOn(runHTMLJar)
+        val compileKotlin2Js = dependsOn("compileKotlin2Js")
 
-        this.mustRunAfter("clean")
+        buildChildren.mustRunAfter("clean")
+        runHTMLJar.mustRunAfter(buildChildren)
+        compileKotlin2Js.mustRunAfter(runHTMLJar)
     }
 }
