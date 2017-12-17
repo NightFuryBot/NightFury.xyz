@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package js
+package js.error
 
-import kotlin.browser.window
+import js.URLs
+import kotlinx.html.dom.append
+import kotlinx.html.js.a
+import kotlinx.html.js.h1
+import kotlin.browser.document
 
-fun main(args: Array<String>) {
-    val currentLocation = window.location.pathname
-    window.onload = onload@ {
-        // Check to see if the path requested is hidden
-        if(URLs.HIDDEN_PATHS.any { it.equals(currentLocation, ignoreCase = true) }) {
-            return@onload HTMLDoc.ERROR404.redirectTo()
+fun generate403Page() {
+    document.head?.append {
+        h1 { + "403 - Forbidden Page!" }
+
+        a {
+            + "Go to main site."
+            href = URLs.BASE_URL
         }
-        console.info(currentLocation)
-
-        val doc = HTMLDoc.values().find {
-            it.suffix.equals(currentLocation, ignoreCase = true)
-        } ?: return@onload HTMLDoc.ERROR404.redirectTo()
-
-        doc.run(it)
     }
 }

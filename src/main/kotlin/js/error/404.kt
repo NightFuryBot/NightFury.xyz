@@ -24,7 +24,7 @@ import kotlinx.html.js.h1
 import kotlin.browser.document
 
 fun generate404Page() {
-    document.run { body ?: create.body {} }.append {
+    document.body?.append {
         h1 { + "404 - Not Found!" }
 
         a {

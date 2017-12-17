@@ -13,33 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package xyz.nightfury.html
+package xyz.nightfury.css
 
-import kotlinx.html.HTML
-import kotlinx.html.TagConsumer
-import kotlinx.html.html
-import kotlinx.html.lang
-import org.w3c.dom.Document
 import java.io.File
 import java.nio.file.Paths
 
 /**
  * @author Kaidan Gustave
  */
-interface DocumentGenerator {
+interface StylesheetGenerator {
     val file: String
     val subDir: String
         get() = ""
 
     fun file(base: String): File {
-        return if(subDir.isNotEmpty()) Paths.get(base, subDir, "$file.html").toFile()
-        else Paths.get(base, "$file.html").toFile()
+        return if(subDir.isNotEmpty()) Paths.get(base, subDir, "$file.css").toFile()
+        else Paths.get(base, "$file.css").toFile()
     }
-
-    fun TagConsumer<Document>.create(): Document = html {
-        lang = "en"
-        generate()
-    }
-
-    fun HTML.generate(): Any
 }

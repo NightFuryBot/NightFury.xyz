@@ -1,5 +1,4 @@
 @file:Suppress("LocalVariableName", "PropertyName")
-
 import org.gradle.language.base.internal.plugins.CleanRule
 import org.jetbrains.kotlin.gradle.dsl.Coroutines
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
@@ -8,7 +7,7 @@ import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 buildscript {
     var kotlin_version: String by extra
-    kotlin_version = "1.2.0"
+    kotlin_version = "1.2.10"
 
     repositories {
         jcenter()
@@ -87,6 +86,12 @@ tasks {
                     exclude("**/*.kjsm")
                 }
                 into("$buildDir/www/html")
+            }
+
+            copy {
+                includeEmptyDirs = false
+                from("$buildDir/css")
+                into("$buildDir/www/html/stylesheets")
             }
         }
     }

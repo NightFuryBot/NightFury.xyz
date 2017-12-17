@@ -18,6 +18,7 @@ package xyz.nightfury.html.document
 import kotlinx.html.*
 import xyz.nightfury.html.DocumentGenerator
 import xyz.nightfury.html.extensions.discord
+import xyz.nightfury.html.extensions.favicon
 
 /**
  * @author Kaidan Gustave
@@ -38,11 +39,7 @@ object Index : DocumentGenerator {
             link { rel = "stylesheet"; type = "text/css"; href = "fonts/kingthings_clarity/stylesheet.css" }
             link { rel = "stylesheet"; type = "text/css"; href = "stylesheets/index.css" }
 
-            link { rel = "manifest"; href = "favicon/manifest.json" }
-
-            meta { name = "msapplication-TileColor"; content = "#ffffff" }
-            meta { name = "msapplication-TileImage"; content = "ms-icon-144x144.png" }
-            meta { name = "theme-color"; content = "#ffffff" }
+            favicon(base = "/")
 
             meta {
                 name = "keywords"

@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@import "horizontal-nav-bar.css";
+package js.error
 
-:root {
-    --dark-text: darkred;
-    --light-text: orangered;
-    --selection-highlight: #B3E25E;
-    --main-page-color: #313332;
-    --nav-bar-block-color: #414442;
-}
+import js.URLs
+import kotlinx.html.dom.append
+import kotlinx.html.js.a
+import kotlinx.html.js.h1
+import kotlin.browser.document
 
-.copyright {
-    top: 90%;
-    left: 50%;
-    position: fixed;
-    vertical-align: middle;
-    font-family: sans-serif;
-    font-weight: bold;
-    transform: translate(-50%, -10%);
-    color: var(--light-text);
+fun generate400Page() {
+    document.body?.append {
+        h1 { + "400 - Bad Request!" }
+
+        a {
+            + "Go to main site."
+            href = URLs.BASE_URL
+        }
+    }
 }

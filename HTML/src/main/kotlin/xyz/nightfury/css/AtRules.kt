@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package js
+package xyz.nightfury.css
 
-import kotlin.browser.window
+@Repeatable
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+annotation class Import(val value: String)
 
-fun main(args: Array<String>) {
-    val currentLocation = window.location.pathname
-    window.onload = onload@ {
-        // Check to see if the path requested is hidden
-        if(URLs.HIDDEN_PATHS.any { it.equals(currentLocation, ignoreCase = true) }) {
-            return@onload HTMLDoc.ERROR404.redirectTo()
-        }
-        console.info(currentLocation)
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION)
+annotation class Keyframes
 
-        val doc = HTMLDoc.values().find {
-            it.suffix.equals(currentLocation, ignoreCase = true)
-        } ?: return@onload HTMLDoc.ERROR404.redirectTo()
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION)
+annotation class CSSName(val value: String)
 
-        doc.run(it)
-    }
-}
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION)
+annotation class CSSPriority(val value: Int)

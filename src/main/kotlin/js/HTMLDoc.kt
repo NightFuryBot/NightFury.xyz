@@ -16,8 +16,9 @@
 package js
 
 import js.error.generate404Page
+import js.error.generate403Page
+import js.error.generate400Page
 import kotlinx.html.dom.append
-import kotlinx.html.dom.create
 import kotlinx.html.js.*
 import org.w3c.dom.events.Event
 import kotlin.browser.document
@@ -26,9 +27,9 @@ import kotlin.browser.window
 /**
  * @author Kaidan Gustave
  */
-enum class HTMLDoc(private val title: String, val suffix: String, val generator: (Event) -> Unit) {
-    LANDING("NightFury", "/", generator = {
-        document.run { body ?: create.body {} }.append {
+enum class HTMLDoc(private val title: String?, val suffix: String, val generator: (Event) -> Unit) {
+    LANDING(null, "/", generator = {
+        document.body?.append {
             navBar()
             div(classes = "center-div") {
                 h1(classes = "center-div-header") {
@@ -56,15 +57,16 @@ enum class HTMLDoc(private val title: String, val suffix: String, val generator:
         window.location.assign(URLs.GITHUB_REPO)
     }),
 
-    ERROR404("404 Not Found","/error/404", generator = { generate404Page() });
+    ERROR400(null, "/error/400", generator = { generate400Page() }),
+    ERROR403(null, "/error/403", generator = { generate403Page() }),
+    ERROR404(null, "/error/404", generator = { generate404Page() });
 
     val url: String = "${URLs.BASE_URL}$suffix"
 
     fun redirectTo() = window.location.assign(url)
 
     fun run(event: Event) {
-        document.title = title
+        title?.let { document.title = it }
         generator(event)
-
     }
 }

@@ -13,23 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package js
+package xyz.nightfury.css
 
-import kotlin.browser.window
+import azadev.kotlin.css.Stylesheet
 
-fun main(args: Array<String>) {
-    val currentLocation = window.location.pathname
-    window.onload = onload@ {
-        // Check to see if the path requested is hidden
-        if(URLs.HIDDEN_PATHS.any { it.equals(currentLocation, ignoreCase = true) }) {
-            return@onload HTMLDoc.ERROR404.redirectTo()
-        }
-        console.info(currentLocation)
+fun translate(tx: String, ty: String): String = "translate($tx, $ty)"
+fun `var`(variable: String): String = "var($variable)"
 
-        val doc = HTMLDoc.values().find {
-            it.suffix.equals(currentLocation, ignoreCase = true)
-        } ?: return@onload HTMLDoc.ERROR404.redirectTo()
+inline fun Stylesheet.keyframes(cla: String, crossinline block: Stylesheet.() -> Unit) = at("keyframes $cla") { block() }
 
-        doc.run(it)
-    }
-}
+inline fun Stylesheet.from(crossinline block: Stylesheet.() -> Unit) = "from" { block() }
+inline fun Stylesheet.to(crossinline block: Stylesheet.() -> Unit) = "to" { block() }

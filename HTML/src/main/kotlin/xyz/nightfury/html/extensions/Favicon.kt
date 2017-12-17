@@ -13,33 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.nav-bar-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
+package xyz.nightfury.html.extensions
 
-.nav-bar-li {
-    display: inline;
-    float: left;
-}
+import kotlinx.html.HEAD
+import kotlinx.html.link
+import kotlinx.html.meta
 
-.nav-bar-a {
-    background-color: var(--nav-bar-block-color);
-}
+fun HEAD.favicon(base: String = "../") {
+    link { rel = "manifest"; href = "${base}favicon/manifest.json" }
 
-.nav-bar-li .nav-bar-a {
-    display: block;
-    color: var(--selection-highlight);
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-family: "Kingthings Clarity", sans-serif;
-}
-
-.nav-bar-li .nav-bar-a:hover {
-    /* Swap the two when hovering */
-    color: var(--nav-bar-block-color) darken;
-    background-color: var(--selection-highlight);
-    transition-duration: .5s;
+    meta { name = "msapplication-TileColor"; content = "#ffffff" }
+    meta { name = "msapplication-TileImage"; content = "ms-icon-144x144.png" }
+    meta { name = "theme-color"; content = "#ffffff" }
 }
